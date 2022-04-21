@@ -5,54 +5,87 @@
 
 #include "Universe.h"
 
+//Default window size
 int WIDTH = 1280, HEIGTH = 720;
+int FPS_CAP = 240;
+
+float random()
+{
+    return static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+}
 
 int main()
 {
+    //Window initialization
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGTH), "Universe Simulation");
-    window.setFramerateLimit(60);
+    window.setFramerateLimit(FPS_CAP);
     
-    
-    float zoom = 5e6f; 
+    //Camera movement
+    float zoom = 1e4; 
     int offsetX = 0, offsetY = 0;
+    int previousMouseX = 0, previousMouseY = 0;
+    int currentMouseX = 0, currentMouseY = 0;
+    int deltaX = 0, deltaY = 0;
 
+    //TEMP: Universe declaration
     sim::Universe universe;
-    universe.AddBody(sim::CelestialBody(sf::Vector2f(0, 0), sf::Vector2f(0, 0), 6e24f, sf::CircleShape(10)));
-    universe.AddBody(sim::CelestialBody(sf::Vector2f(0, 3.844e8f), sf::Vector2f(1025, 0), 7.3e22f, sf::CircleShape(10)));
+    for (int i = 0; i < 4; ++i)
+    {
+        universe.AddBody(sim::CelestialBody(sf::Vector2f(random() - 0.5f, random() - 0.5f) * 1e6f, sf::Vector2f(random() - 0.5f, random() - 0.5f) * 10000.0f, 1e23f, sf::CircleShape(5.0f)));
+    }
 
+    //Main game loop
     while (window.isOpen()) 
     {
         sf::Event event;
 
-        int previousMouseX = 0, previousMouseY = 0;
-
         while (window.pollEvent(event)) 
         {
+            //Checking if closed
             if (event.type == sf::Event::Closed)
                 window.close();
+            //Resizing handling
             if (event.type == sf::Event::Resized)
             {
                 WIDTH = event.size.width;
                 HEIGTH = event.size.height;
                 window.create(sf::VideoMode(WIDTH, HEIGTH), "Universe Simulation");
+                window.setFramerateLimit(FPS_CAP);
             }
-            if (event.type == sf::Event::MouseWheelMoved) {
-                zoom += zoom * event.mouseWheel.delta / 5;
-                zoom = max(zoom, (float)0.5);
+            //Zoom handling
+            if (event.type == sf::Event::MouseWheelMoved) 
+            {
+                float delta = -(float)event.mouseWheel.delta / 5;
+
+                delta = 1 + delta;
+
+                offsetX /= delta;
+                offsetY /= delta;
+                zoom *= delta;
+
+                std::cout << delta << "\n";
             }
-            if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) {
-                offsetX += (sf::Mouse::getPosition().x - previousMouseX) / 60;
-                offsetY += (sf::Mouse::getPosition().y - previousMouseY) / 60;
-                previousMouseX = sf::Mouse::getPosition().x;
-                previousMouseY = sf::Mouse::getPosition().y;
-            }
+        }
+
+        //Camera movement handling
+        previousMouseX = currentMouseX;
+        previousMouseY = currentMouseY;
+        currentMouseX = sf::Mouse::getPosition(window).x;
+        currentMouseY = sf::Mouse::getPosition(window).y;
+        deltaX = currentMouseX - previousMouseX;
+        deltaY = currentMouseY - previousMouseY;
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) 
+        { 
+            offsetX += deltaX;
+            offsetY += deltaY;
         }
         
         window.clear(sf::Color::Black);
 
+        //Physical calculations
         universe.CalculateDeltaV();
         universe.CalculatePositions();
-        universe.DrawPlanets(&window, WIDTH / 2 + offsetX, HEIGTH / 2 + offsetY, zoom);
+        universe.DrawPlanets(&window, (WIDTH + offsetX) / 2, (HEIGTH + offsetY) / 2, zoom); 
         
         window.display();
     }

@@ -27,8 +27,8 @@ namespace sim
 				sf::Vector2f deltaPos = this->bodyList[j].position - this->bodyList[i].position;
 				float distance = (float)sqrt((float)pow((double)deltaPos.x, 2) + (float)pow((double)deltaPos.y, 2));
 				sf::Vector2f normalized = deltaPos / distance;
-				float force = this->G * this->bodyList[i].mass * this->bodyList[j].mass / (float)pow((double)distance, 2);
-				a += force * normalized / this->bodyList[i].mass;
+				float force = this->G * this->bodyList[j].mass / (float)pow((double)distance, 2);
+				a += force * normalized;
 			}
 
 			this->bodyList[i].velocity += a * this->timeStep;
