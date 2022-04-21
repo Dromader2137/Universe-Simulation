@@ -25,9 +25,9 @@ namespace sim
 				if (i == j) continue;
 
 				sf::Vector2f deltaPos = this->bodyList[j].position - this->bodyList[i].position;
-				float distance = sqrt(pow(deltaPos.x, 2) + pow(deltaPos.y, 2));
+				float distance = (float)sqrt((float)pow((double)deltaPos.x, 2) + (float)pow((double)deltaPos.y, 2));
 				sf::Vector2f normalized = deltaPos / distance;
-				float force = this->G * this->bodyList[i].mass * this->bodyList[j].mass / pow(distance, 2);
+				float force = this->G * this->bodyList[i].mass * this->bodyList[j].mass / (float)pow((double)distance, 2);
 				a += force * normalized / this->bodyList[i].mass;
 			}
 

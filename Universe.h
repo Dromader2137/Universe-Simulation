@@ -14,7 +14,7 @@ namespace sim
 			std::vector<sim::CelestialBody> bodyList;
 			
 			float timeStep = 5;
-			const float G = 6.67e-11;
+			const float G = 6.67e-11f;
 
 			void AddBody(CelestialBody body);
 
