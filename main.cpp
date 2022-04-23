@@ -33,6 +33,7 @@ int main()
     {
         universe.AddBody(sim::CelestialBody(sf::Vector2f(random() - 0.5f, random() - 0.5f) * 1e6f, sf::Vector2f(random() - 0.5f, random() - 0.5f) * 10000.0f, 1e23f, sf::CircleShape(5.0f)));
     }
+    //---
 
     //Main game loop
     while (window.isOpen()) 
@@ -82,7 +83,7 @@ int main()
         
         window.clear(sf::Color::Black);
 
-        //Physical calculations
+        //Simulation stuff
         universe.CalculateDeltaV();
         universe.CalculatePositions();
         universe.DrawPlanets(&window, (WIDTH + offsetX) / 2, (HEIGTH + offsetY) / 2, zoom); 

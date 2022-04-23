@@ -11,17 +11,21 @@ namespace sim
 	class Universe
 	{
 		public:
+			//List of all bodies
 			std::vector<sim::CelestialBody> bodyList;
 			
+			//Simulation variables
 			float timeStep = 0.1;
 			const float G = 6.67e-11f;
 
+			//Adding a new Body
 			void AddBody(CelestialBody body);
 
+			
 			void CalculatePositions();
-
 			void CalculateDeltaV();
 
+			//Drawing planets
 			void DrawPlanets(sf::RenderWindow *window, int offsetX, int offsetY, float zoom);
 	};
 }

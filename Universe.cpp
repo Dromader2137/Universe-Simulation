@@ -6,11 +6,13 @@
 
 namespace sim
 {
+	//Adding a body
 	void Universe::AddBody(CelestialBody body)
 	{
 		this->bodyList.push_back(body);
 	}
 
+	//Calculating physics
 	void Universe::CalculatePositions() {
 		for (int i = 0; i < this->bodyList.size(); ++i) {
 			this->bodyList[i].position += this->bodyList[i].velocity * this->timeStep;
@@ -35,6 +37,7 @@ namespace sim
 		}
 	}
 
+	//Drawing planets
 	void Universe::DrawPlanets(sf::RenderWindow *window, int offsetX, int offsetY, float zoom) {
 		for (int i = 0; i < this->bodyList.size(); ++i) {
 			this->bodyList[i].sprite.setPosition(this->bodyList[i].position.x / zoom + offsetX, -this->bodyList[i].position.y / zoom + offsetY);
