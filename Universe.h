@@ -20,8 +20,8 @@ namespace sim
 
 			//Adding a new Body
 			void AddBody(CelestialBody body);
-
 			
+			//Physics
 			void CalculatePositions();
 			void CalculateDeltaV();
 

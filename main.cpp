@@ -19,6 +19,8 @@ int main()
     //Window initialization
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGTH), "Universe Simulation");
     window.setFramerateLimit(FPS_CAP);
+
+    srand(2121);
     
     //Camera movement
     float zoom = 1e4; 
@@ -29,9 +31,9 @@ int main()
 
     //TEMP: Universe declaration
     sim::Universe universe;
-    for (int i = 0; i < 4; ++i)
+    for (int i = 0; i < 5; ++i)
     {
-        universe.AddBody(sim::CelestialBody(sf::Vector2f(random() - 0.5f, random() - 0.5f) * 1e6f, sf::Vector2f(random() - 0.5f, random() - 0.5f) * 10000.0f, 1e23f, sf::CircleShape(5.0f)));
+        universe.AddBody(sim::CelestialBody(sf::Vector2f(random() - 0.5f, random() - 0.5f) * 5e6f, sf::Vector2f(random() - 0.5f, random() - 0.5f) * 10000.0f, 1e24f, sf::CircleShape(5.0f)));
     }
     //---
 
@@ -86,7 +88,7 @@ int main()
         //Simulation stuff
         universe.CalculateDeltaV();
         universe.CalculatePositions();
-        universe.DrawPlanets(&window, (WIDTH + offsetX) / 2, (HEIGTH + offsetY) / 2, zoom); 
+        universe.DrawPlanets(&window, WIDTH / 2 + offsetX, HEIGTH / 2 + offsetY, zoom); 
         
         window.display();
     }
