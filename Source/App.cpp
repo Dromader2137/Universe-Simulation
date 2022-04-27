@@ -2,13 +2,14 @@
 #include <iostream>
 #include <algorithm>
 #include <minmax.h>
+#include <time.h>
 
 #include "Universe.h"
 
 //Default window size
 int WIDTH = 1280, HEIGTH = 720;
-int FPS_CAP = 60;
-int FRAME_SUBDIVISIONS = 1000;
+int FPS_CAP = 144;
+int FRAME_SUBDIVISIONS = 100;
 
 float random()
 {
@@ -30,11 +31,15 @@ int main()
     int currentMouseX = 0, currentMouseY = 0;
     int deltaX = 0, deltaY = 0;
 
+    //FPS Counting
+    float fps;
+    sf::Clock fpsClock;
+
     //TEMP: Universe declaration
     sim::Universe universe;
-    for (int i = 0; i < 20; ++i)
+    for (int i = 0; i < 10; ++i)
     {
-        universe.AddBody(sim::CelestialBody(sf::Vector2f(random() - 0.5f, random() - 0.5f) * 5e6f, sf::Vector2f(random() - 0.5f, random() - 0.5f) * 10000.0f, 1e24f, sf::CircleShape(5.0f)));
+        universe.AddBody(sim::CelestialBody(sf::Vector2f(random() - 0.5f, random() - 0.5f) * 5e6f, sf::Vector2f(random() - 0.5f, random() - 0.5f) * 10000.0f, (random() + 1.0f) * 1e24f + 1.0f, sf::CircleShape(5.0f)));
     }
     //---
 
@@ -63,8 +68,8 @@ int main()
 
                 delta = 1 + delta;
 
-                offsetX = (int)((float)offsetX / delta);
-                offsetY = (int)((float)offsetX / delta);
+                offsetX = (offsetX / delta);
+                offsetY = (offsetY / delta);
                 zoom *= delta;
             } 
         }
@@ -90,9 +95,14 @@ int main()
             universe.CalculateDeltaV(FRAME_SUBDIVISIONS);
             universe.CalculatePositions(FRAME_SUBDIVISIONS);
         }
-        universe.DrawPlanets(&window, WIDTH / 2 + offsetX, HEIGTH / 2 + offsetY, zoom); 
+        universe.DrawPlanets(&window, (WIDTH) / 2 + offsetX , (HEIGTH) / 2 + offsetY, zoom); 
         
         window.display();
+
+        //FPS Counting
+        float currentTime = fpsClock.restart().asSeconds();
+        fps = 1.0f / currentTime;
+        std::cout << "FPS: " << (int)fps << "\n";
     }
 
     return 0;
