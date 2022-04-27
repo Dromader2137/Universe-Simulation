@@ -15,4 +15,4 @@ I'm planning to include:
   - CUDA (work in progress) 
 - ### Requirements 
   - x64 system
-  - Nvidia GPU
+  - Nvidia GPU (when I'll implement CUDA)
