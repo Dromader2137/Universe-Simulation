@@ -2,6 +2,11 @@
 ## Description
 This whole project is about creating a very efficient universe simulation. 
 
+I'm planning to include:
+- Gravity
+- Temperature
+- Life (Civilizations)
+
 ## Technical stuff
 - ### Languages
   - C++
