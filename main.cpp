@@ -67,7 +67,7 @@ int main()
                 zoom *= delta;
 
                 std::cout << delta << "\n";
-            }
+            } 
         }
 
         //Camera movement handling
