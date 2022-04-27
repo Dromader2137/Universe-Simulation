@@ -13,13 +13,13 @@ namespace sim
 	}
 
 	//Calculating physics
-	void Universe::CalculatePositions() {
+	void Universe::CalculatePositions(int subdivisions) {
 		for (int i = 0; i < this->bodyList.size(); ++i) {
-			this->bodyList[i].position += this->bodyList[i].velocity * this->timeStep;
+			this->bodyList[i].position += this->bodyList[i].velocity * (this->timeStep / (float)subdivisions);
 		}
 	}
 
-	void Universe::CalculateDeltaV() {
+	void Universe::CalculateDeltaV(int subdivisions) {
 		for (int i = 0; i < this->bodyList.size(); ++i) {
 			sf::Vector2f a = sf::Vector2f(0, 0);
 
@@ -33,7 +33,7 @@ namespace sim
 				a += force * normalized;
 			}
 
-			this->bodyList[i].velocity += a * this->timeStep;
+			this->bodyList[i].velocity += a * (this->timeStep / (float)subdivisions);
 		}
 	}
 

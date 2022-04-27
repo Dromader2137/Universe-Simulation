@@ -7,7 +7,8 @@
 
 //Default window size
 int WIDTH = 1280, HEIGTH = 720;
-int FPS_CAP = 240;
+int FPS_CAP = 60;
+int FRAME_SUBDIVISIONS = 1000;
 
 float random()
 {
@@ -31,7 +32,7 @@ int main()
 
     //TEMP: Universe declaration
     sim::Universe universe;
-    for (int i = 0; i < 5; ++i)
+    for (int i = 0; i < 20; ++i)
     {
         universe.AddBody(sim::CelestialBody(sf::Vector2f(random() - 0.5f, random() - 0.5f) * 5e6f, sf::Vector2f(random() - 0.5f, random() - 0.5f) * 10000.0f, 1e24f, sf::CircleShape(5.0f)));
     }
@@ -62,11 +63,9 @@ int main()
 
                 delta = 1 + delta;
 
-                offsetX /= delta;
-                offsetY /= delta;
+                offsetX = (int)((float)offsetX / delta);
+                offsetY = (int)((float)offsetX / delta);
                 zoom *= delta;
-
-                std::cout << delta << "\n";
             } 
         }
 
@@ -86,8 +85,11 @@ int main()
         window.clear(sf::Color::Black);
 
         //Simulation stuff
-        universe.CalculateDeltaV();
-        universe.CalculatePositions();
+        for (int i = 0; i < FRAME_SUBDIVISIONS; ++i)
+        {
+            universe.CalculateDeltaV(FRAME_SUBDIVISIONS);
+            universe.CalculatePositions(FRAME_SUBDIVISIONS);
+        }
         universe.DrawPlanets(&window, WIDTH / 2 + offsetX, HEIGTH / 2 + offsetY, zoom); 
         
         window.display();
